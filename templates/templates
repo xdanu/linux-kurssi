@@ -1,0 +1,15 @@
+[Unit]
+Description=Viikko 2 Flask-sovellus
+After=network.target mariadb.service
+Requires=mariadb.service
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/viikko2
+EnvironmentFile=/etc/viikko2.env
+ExecStart=/home/ubuntu/viikko2/.venv/bin/gunicorn --workers 2 --bind 127.0.0.1:8000 --access-logfile - --error-logfile - app:app
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
