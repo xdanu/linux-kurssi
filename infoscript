@@ -1,14 +1,53 @@
- #!/bin/bash
-{
+#!/bin/bash
+
 timedatectl
 uptime
 df -h /
 free -h
 kaytetty=$(df  / | awk  'NR==2 {print $5}' | tr -d '%')
 if [ "$kaytetty" -lt 80 ]; then
-        echo "Ok"
+        tila="Ok"
+	vari="#00FF00"
 else
-        echo "Warning"
-fi
-echo Raportti luotu: $(date) 
-}>/home/ubuntu/viikko3/index.html
+        tila="Warning"
+	vari="#FF0000"
+fi 
+
+
+
+cat << moi > /home/ubuntu/viikko3/index.html
+
+<html lang="fi"><head>
+<meta charset="UTF-8">
+<title>Mun viikon 3 sivu
+</title>
+
+
+<style>
+body {	
+	background: #000000;
+	color: #00FFFF;
+	margin: 100px;
+	.purple{
+	color: #d8baff;
+	}
+</style>
+</head>
+<body>
+<h1>Viikko 3</h1>
+<a href="https://github.com/xdanu/linux-kurssi/tree/viikko3/">Github linkki</a>
+<p><a href="/">Viikon 1 etusivulle</a></p>
+
+<h2>
+<p>\$kaytetty=\$(df / | awk 'NR==2 {print $5}' | tr -d '%') <span class="purple"> ottaa df / riviltä 2, sarakkeen 5 arvon ja sijoittaa sen muuttujaan KAYTETTY ilman %-merkkiä</span></p>
+
+<p>sudo nginx -t <span class="purple"> tarkista nginxin syntaksi
+
+<p>sudo nano infoscript <span class="purple"> tällä aukeaa script tekstieditorissa</span>
+
+
+<p>Tila on: <span style="color: $vari;">$tila</span> Raportti luotu: $(date)</p>
+</h2></body></html>
+
+
+moi
