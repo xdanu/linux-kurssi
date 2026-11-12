@@ -1,0 +1,14 @@
+ #!/bin/bash
+{
+timedatectl
+uptime
+df -h /
+free -h
+kaytetty=$(df  / | awk  'NR==2 {print $5}' | tr -d '%')
+if [ "$kaytetty" -lt 80 ]; then
+        echo "Ok"
+else
+        echo "Warning"
+fi
+echo Raportti luotu: $(date) 
+}>/home/ubuntu/viikko3/index.html
