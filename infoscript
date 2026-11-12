@@ -40,14 +40,14 @@ body {
 
 <h2>
 <p>\$kaytetty=\$(df / | awk 'NR==2 {print $5}' | tr -d '%') <span class="purple"> ottaa df / riviltä 2, sarakkeen 5 arvon ja sijoittaa sen muuttujaan KAYTETTY ilman %-merkkiä</span></p>
-
 <p>sudo nginx -t <span class="purple"> tarkista nginxin syntaksi
 
 <p>sudo nano infoscript <span class="purple"> tällä aukeaa script tekstieditorissa</span>
-
-
-<p>Tila on: <span style="color: $vari;">$tila</span> Raportti luotu: $(date)</p>
-</h2></body></html>
+</h2><h3>
+<p>Sivu päivittyy minuutin välein crontabin avulla. Script saa järjestelmän tietoja scriptin alussa olevien komentojen kautta.</p>
+<p>Hankaluuksia aiheutti sivun saaminen näyttämään eri elementit ja tiedot oikein. Sain ongelmat ratkaistua hitaasti kokeilemalla eri ratkaisuja. Unohdin myös että oli annettu valmis html-pohja</p>
+<p>Tila: <span style="color: $vari;">$tila</span> Raportti luotu: $(date)</p>
+</h3></body></html>
 
 
 moi
