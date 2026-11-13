@@ -1,53 +1,257 @@
 #!/bin/bash
 
-timedatectl
-uptime
-df -h /
-free -h
-kaytetty=$(df  / | awk  'NR==2 {print $5}' | tr -d '%')
-if [ "$kaytetty" -lt 80 ]; then
-        tila="Ok"
-	vari="#00FF00"
-else
-        tila="Warning"
-	vari="#FF0000"
-fi 
-
+				kaytetty50=50
+                                if [ "$kaytetty50" -lt 80 ]; then
+                                        tila50="Ok"
+                                else
+                                        tila50="Warning"
+				fi
+                                kaytetty80=80
+                                if [ "$kaytetty80" -lt 80 ]; then
+                                        tila80="Ok"
+                                else
+                                        tila80="Warning"
+				fi
+                                kaytetty90=90
+                                if [ "$kaytetty90" -lt 80 ]; then
+                                        tila90="Ok"
+                                else
+                                        tila90="Warning"
+				fi
 
 
 cat << moi > /home/ubuntu/viikko3/index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Week 3 – Server Status Report</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            line-height: 1.6;
+            background: #f1f5f9;
+            color: #172033;
+        }
 
-<html lang="fi"><head>
-<meta charset="UTF-8">
-<title>Mun viikon 3 sivu
-</title>
+        h1, h2 {
+            color: #173b65;
+        }
 
+        section {
+            margin: 24px 0;
+            padding: 24px;
+            background: white;
+            border-radius: 12px;
+        }
 
-<style>
-body {	
-	background: #000000;
-	color: #00FFFF;
-	margin: 100px;
-	.purple{
-	color: #d8baff;
-	}
-</style>
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #dbeafe;
+        }
+
+        code {
+            background: #e2e8f0;
+            padding: 2px 5px;
+            border-radius: 4px;
+            overflow-wrap: anywhere;
+        }
+
+        a {
+            color: #1746a2;
+        }
+
+        .note {
+            color: #475569;
+        }
+    </style>
 </head>
 <body>
-<h1>Viikko 3</h1>
-<a href="https://github.com/xdanu/linux-kurssi/tree/viikko3/">Github linkki</a>
-<p><a href="/">Viikon 1 etusivulle</a></p>
+    <header>
+        <h1>Server Status Report</h1>
+        <p>Week 3: Linux command line and Bash scripting</p>
+        <p>Welcome</p>
+    </header>
 
-<h2>
-<p>\$kaytetty=\$(df / | awk 'NR==2 {print $5}' | tr -d '%') <span class="purple"> ottaa df / riviltä 2, sarakkeen 5 arvon ja sijoittaa sen muuttujaan KAYTETTY ilman %-merkkiä</span></p>
-<p>sudo nginx -t <span class="purple"> tarkista nginxin syntaksi
+    <section>
+        <h2>Current server status</h2>
 
-<p>sudo nano infoscript <span class="purple"> tällä aukeaa script tekstieditorissa</span>
-</h2><h3>
-<p>Sivu päivittyy minuutin välein crontabin avulla. Script saa järjestelmän tietoja scriptin alussa olevien komentojen kautta.</p>
-<p>Hankaluuksia aiheutti sivun saaminen näyttämään eri elementit ja tiedot oikein. Sain ongelmat ratkaistua hitaasti kokeilemalla eri ratkaisuja. Unohdin myös että oli annettu valmis html-pohja</p>
-<p>Tila: <span style="color: $vari;">$tila</span> Raportti luotu: $(date)</p>
-</h3></body></html>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Information</th>
+                        <th scope="col">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">Report generated</th>
+                        <td>$(date)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Server uptime</th>
+                        <td>$(uptime)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Root filesystem disk usage</th>
+                        <td>$(df /| awk 'NR==2 {print $5}')</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Disk space status</th>
+                        <td>$(df| awk 'NR==2 {print $5}')</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Total RAM</th>
+                        <td>$(free -m | awk 'NR==2 {print $2}') MiB</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Available RAM</th>
+                        <td>$(free -m | awk 'NR==2 {print $4}') MiB</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
+        <p>
+            Disk space status is <strong>OK</strong> below 80% usage
+            and <strong>WARNING</strong> at 80% or above.
+        </p>
+
+        <p class="note">
+            Bash generates this report once per minute.
+            Wait approximately 1–2 minutes and reload the page
+            to see a new generation time.
+        </p>
+    </section>
+
+    <section>
+        <h2>Commands used</h2>
+        <ul>
+            <li>
+                <code>date</code>:
+                displays the current date, time and time zone
+                using the format specified in the script.
+            </li>
+            <li>
+                <code>uptime -p</code>:
+                displays how long the server has been running.
+            </li>
+            <li>
+                <code>df -P / | awk 'NR == 2 {print &#36;5}'</code>:
+                passes filesystem information to awk, which extracts
+                the usage percentage from the second row.
+            </li>
+            <li>
+                <code>free -m</code>:
+                displays memory information in mebibytes (MiB).
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>How the script works</h2>
+        <p>
+            The script collects server information using Linux commands
+            and stores the results in Bash variables through command
+            substitution. A function uses an if statement to determine
+            the disk space status.
+        </p>
+        <p>
+            The script generates a temporary HTML file and then moves
+            the completed file into place as index.html.
+            Nginx serves this file at /viikko3/.
+        </p>
+        <p>
+	<code>kaytetty=\$(df  / | awk  'NR==2 {print \$5}' | tr -d '%')</code> Takes the value of 'df /' from the 2nd row and 5th column and removes the %-sign.
+        </p>
+    </section>
+
+    <section>
+        <h2>Scheduling</h2>
+        <p>
+	I used cron. Its configured to start on boot
+	and updates the page once a minute.
+        </p>
+    </section>
+
+    <section>
+        <h2>Test results</h2>
+
+        <h3>Syntax check and manual execution</h3>
+        <p>
+            Running<code>bash -n report.sh</code>gives no errors so I guess it works fine
+        </p>
+
+        <h3>Disk space status tests</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Test input</th>
+                        <th scope="col">Expected status</th>
+                        <th scope="col">Actual status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>50%</td>
+                        <td>OK</td>
+                        <td>$tila50</td>
+                    </tr>
+                    <tr>
+                        <td>80%</td>
+                        <td>WARNING</td>
+                        <td>$tila80</td>
+                    </tr>
+                    <tr>
+                        <td>90%</td>
+                        <td>WARNING</td>
+                        <td>$tila90</td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>Automatic updates</h3>
+        <p>
+            The site updates successfully every minute
+	</p>
+
+        <h3>Reboot test</h3>
+        <p>
+		The time when I restarted the VM is visible in the 'Server uptime' tab. Page continues to update every minute after rebooting.
+        </p>
+    </section>
+
+    <section>
+        <h2>A problem solved or a lesson learned</h2>
+        <p>I had difficulties making the page and script work together because I didn't remember a ready html base was given to us</p>
+    </section>
+
+    <footer>
+        <p><a href="https://github.com/xdanu/linux-kurssi/tree/viikko3">View the source code on GitHub</a></p>
+    </footer>
+</body>
+</html>
 
 moi
